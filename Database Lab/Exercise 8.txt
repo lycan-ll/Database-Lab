@@ -1,0 +1,152 @@
+create database person;
+Query OK, 1 row affected
+
+use person;
+Database changed
+ create table users(user_id INT NOT NULL,
+    -> user_name VARCHAR(16) NOT NULL,
+    -> password VARCHAR(16) NOT NULL,
+    -> email VARCHAR(16) NOT NULL,
+    -> primary key (user_id));
+Query OK, 0 rows affected
+
+************************************************************************************************************************************************************************
+
+Question 1:
+
+ Create PROCEDURE insert_summary(IN p_id int,IN p_total_users int,IN p_yahoo int,IN p_hotmail int,IN p_gmail int)
+    -> BEGIN
+    -> insert into summary(id,total_users,yahoo,hotmail,gmail) values (p_id,p_total_users,p_yahoo,p_hotmail,p_gmail)
+    -> ;
+    -> END $$
+Query OK, 0 rows affected
+
+ CREATE TABLE summary (    id INT PRIMARY KEY,    total_users INT,    yahoo INT,    hotmail INT,    gmail INT);
+    -> $$
+ CALL insert_summary(1,2,1,0,1)$$
+Query OK, 1 row affected
+
+ DELIMITER $$
+MariaDB [person]> select * from summary;
+    -> $$
++----+-------------+-------+---------+-------+
+| id | total_users | yahoo | hotmail | gmail |
++----+-------------+-------+---------+-------+
+|  1 |           2 |     1 |       0 |     1 |
++----+-------------+-------+---------+-------+
+
+************************************************************************************************************************************************************************
+
+Question 2:
+
+Create Procedure insert_users(IN p_user_id INT,IN p_user_name VARCHAR(16),IN p_password VARCHAR(16),IN p_email VARCHAR(16),IN p_salary INT)
+    -> BEGIN
+    -> insert into users(user_id,user_name,password,email,salary) values (p_user_id,p_user_name,p_password,p_email,p_salary);
+    -> END $$
+ DELIMITER ;
+MariaDB [person]> CALL ins_users(1,'abc123','def321','abc123@yahoo.com',300000);
+Query OK, 1 row affected
+
+ CALL ins_users(2,'xyz789','asd123','xyz@gmail.com',500000);
+Query OK, 1 row affected
+
+************************************************************************************************************************************************************************
+
+Question 3:
+
+ DELIMITER ??
+MariaDB [person]> CREATE PROCEDURE count_users()
+    -> BEGIN
+    -> SELECT COUNT(*) AS total_users FROM Users;
+    -> END ??
+ DELIMITER ;
+MariaDB [person]> CALL count_users();
++-------------+
+| total_users |
++-------------+
+|           2 |
++-------------+
+1 row in set
+
+************************************************************************************************************************************************************************
+
+Question 4:
+
+ DELIMITER ??
+MariaDB [person]> CREATE PROCEDURE get_avg_salary()
+    -> BEGIN
+    -> SELECT AVG(salary) AS average_salary FROM Users;
+    -> END ??
+ DELIMITER ;
+MariaDB [person]> CALL get_avg_salary();
++----------------+
+| average_salary |
++----------------+
+|    400000.0000 |
++----------------+
+
+************************************************************************************************************************************************************************
+
+Question 5:
+
+ DELIMITER ??
+MariaDB [person]> CREATE PROCEDURE minmax()
+    -> BEGIN
+    -> SELECT CONCAT('Lowest Salary: ', MIN(salary)) AS min_salary,           CONCAT('Highest Salary: ', MAX(salary)) AS max_salary    FROM Users;
+    -> END ??
+MariaDB [person]> DELIMITER ;
+MariaDB [person]> CALL minmax();
++-----------------------+------------------------+
+| min_salary            | max_salary             |
++-----------------------+------------------------+
+| Lowest Salary: 300000 | Highest Salary: 500000 |
++-----------------------+------------------------+
+
+************************************************************************************************************************************************************************
+
+Question 6:
+
+DELIMITER ??
+CREATE TRIGGER add_user_trigger AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+    UPDATE summary SET total_users = total_users + 1;
+END ??
+
+CREATE TRIGGER delete_user_trigger AFTER DELETE ON users
+FOR EACH ROW
+BEGIN
+    UPDATE summary SET total_users = total_users - 1;
+END ??
+
+INSERT INTO users (username, password, email, salary) VALUES
+('john123', 'pass123', 'john123@example.com', 40000),
+('jane456', 'pass456', 'jane456@example.com', 50000),
+('jim789', 'pass789', 'jim789@example.com', 60000),
+('jessica1', 'pass1', 'jessica1@example.com', 70000),
+('jason2', 'pass2', 'jason2@example.com', 80000)//
+
+ALTER TABLE summary ADD total_user INT NOT NULL DEFAULT 0;
+
+ALTER TABLE summary DROP PRIMARY KEY;
+ALTER TABLE summary MODIFY COLUMN id INT auto_increment PRIMARY KEY;
+INSERT INTO summary (total_user) VALUES (0);
+
+mysql> SELECT * FROM summary;
++----+-------------+-------+---------+-------+------------+
+| id | total_users | Yahoo | Hotmail | Gmail | total_user |
++----+-------------+-------+---------+-------+------------+
+|  1 |        NULL |  NULL |    NULL |  NULL |          1 |
++----+-------------+-------+---------+-------+------------+
+
+mysql> DELETE FROM users WHERE username = 'john123';
+Query OK, 2 rows affected (0.01 sec)
+
+mysql> SELECT * FROM summary;
++----+-------------+-------+---------+-------+------------+
+| id | total_users | Yahoo | Hotmail | Gmail | total_user |
++----+-------------+-------+---------+-------+------------+
+|  1 |        NULL |  NULL |    NULL |  NULL |         -1 |
++----+-------------+-------+---------+-------+------------+
+
+

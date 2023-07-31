@@ -1,0 +1,19 @@
+Question 4
+i. All those cities whose time zone is Africa/Harare.
+
+db.cities.find({timezone:"Africa/Harare"}).pretty()
+
+ii. All those cities whose population is greater than 12985000.
+db.Cities.find({"population":{$gt:12985000}}).pretty()
+
+iii. A city whose longitude equals to -58.37723. Your query should return location and population fields only. (hint: use projection)
+db.Cities.find({"location.longitude":{$eq:-58.37723}},{location:1,population:1}).pretty()
+
+5) 5) Write a query to update the population from 35000 to 55000 whose country is PK and a location latitude of 73.2122. (hint: use cities collection)
+db.cities.updateMany({country: "PK", "location.longitude":{$eq: 73.2122}}, {$set:{"population":55000}})
+
+6) Write a query to delete those documents whose timezone is Asia/Karachi and country is PK. (use cities collection)
+db.cities.deleteMany( { timezone:"Asia/Karachi", country:"PK"})
+
+7) Write a query for finding the document whose birthname name array contains (“Freeman, Crispin McDougal”) as a value. (use moviepeople collection)
+db.movies.find({"info.birthname":("Freeman, Crispin McDougal")}).pretty()

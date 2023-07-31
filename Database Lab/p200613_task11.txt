@@ -1,0 +1,112 @@
+use p200613_izaan
+
+-------------------------------------------------------------------------------------------------------------------
+
+db.users.insert({username: "Ali", password:"def321", email:"ali123@yahoo.com", DOB:"1996-03-04", Address: "Peshawar", Contact:"+923332233322"});
+
+-------------------------------------------------------------------------------------------------------------------
+
+db.users.insertMany([{username: "Haroon", password:"fast123", email:"haroon@gmail.com", Address: "Karachi"},
+... {username: "Zain", password:"Abc123", email:"zain@gmail.com", DOB: "1997-02-13", Address: "Islamabad"},
+... {username: "Atif", password: "Qwe123", email:"atif@gmail.com", Address:"Islamabad", Contact:"+923139834276"},
+... {username: "Noman", password:"def321", email:"noman@gmail.com", DOB:"1996-03-04", Address: "Peshawar", Contact: "+923349056432"}]);
+
+-------------------------------------------------------------------------------------------------------------------
+
+db.users.find();
+[
+  {
+    _id: ObjectId("643e4ab13c4ce4a7d8b9eef3"),
+    username: 'Ali',
+    password: 'def321',
+    email: 'ali123@yahoo.com',
+    DOB: '1996-03-04',
+    Address: 'Peshawar',
+    Contact: '+923332233322'
+  },
+  {
+    _id: ObjectId("643e4c643c4ce4a7d8b9eef4"),
+    username: 'Haroon',
+    password: 'fast123',
+    email: 'haroon@gmail.com',
+    Address: 'Karachi'
+  },
+  {
+    _id: ObjectId("643e4c643c4ce4a7d8b9eef5"),
+    username: 'Zain',
+    password: 'Abc123',
+    email: 'zain@gmail.com',
+    DOB: '1997-02-13',
+    Address: 'Islamabad'
+  },
+  {
+    _id: ObjectId("643e4c643c4ce4a7d8b9eef6"),
+    username: 'Atif',
+    password: 'Qwe123',
+    email: 'atif@gmail.com',
+    Address: 'Islamabad',
+    Contact: '+923139834276'
+  },
+  {
+    _id: ObjectId("643e4c643c4ce4a7d8b9eef7"),
+    username: 'Noman',
+    password: 'def321',
+    email: 'noman@gmail.com',
+    DOB: '1996-03-04',
+    Address: 'Peshawar',
+    Contact: '+923349056432'
+  }
+]
+
+-------------------------------------------------------------------------------------------------------------------
+
+db.users.find({Address: "Islamabad"});
+[
+  {
+    _id: ObjectId("643e4c643c4ce4a7d8b9eef5"),
+    username: 'Zain',
+    password: 'Abc123',
+    email: 'zain@gmail.com',
+    DOB: '1997-02-13',
+    Address: 'Islamabad'
+  },
+  {
+    _id: ObjectId("643e4c643c4ce4a7d8b9eef6"),
+    username: 'Atif',
+    password: 'Qwe123',
+    email: 'atif@gmail.com',
+    Address: 'Islamabad',
+    Contact: '+923139834276'
+  }
+]
+
+-------------------------------------------------------------------------------------------------------------------
+
+db.users.find({Address: {$in: ["Karachi", "Peshawar"]}});
+[
+  {
+    _id: ObjectId("643e4ab13c4ce4a7d8b9eef3"),
+    username: 'Ali',
+    password: 'def321',
+    email: 'ali123@yahoo.com',
+    DOB: '1996-03-04',
+    Address: 'Peshawar',
+    Contact: '+923332233322'
+  },
+  {
+    _id: ObjectId("643e4c643c4ce4a7d8b9eef4"),
+    username: 'Haroon',
+    password: 'fast123',
+    email: 'haroon@gmail.com',
+    Address: 'Karachi'
+  },
+  {
+    _id: ObjectId("643e4c643c4ce4a7d8b9eef7"),
+    username: 'Noman',
+    password: 'def321',
+    email: 'noman@gmail.com',
+    DOB: '1996-03-04',
+    Address: 'Peshawar',
+    Contact: '+923349056432'
+  }
+]

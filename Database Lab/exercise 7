@@ -1,0 +1,178 @@
+Question 1:
+
+CREATE VIEW  EMPFR  AS Select * from EMPLOYEE WHERE EMP_NUM="100"; 
+update EMPLOYEE SET EMP_PHONE="324-9652" where EMP_NUM=100; 
+
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+| EMP_NUM | EMP_TITLE | EMP_LNAME  | EMP_FNAME | EMP_DOB    | EMP_HIRE_DATE | EMP_AREA_CODE | EMP_PHONE | PARK_CODE |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+|     100 | Ms        | Calderdale | Emma      | 1972-06-15 | 1992-03-15    | 0181          | 324-9652  | FR1001    |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+
+DROP VIEW EMPFR;
+
+
+
+Question 2:
+
+create view EMP_DETAILS  as select EMP_NUM, e.PARK_CODE, PARK_NAME, EMP_LNAME,EMP_FNAME, EMP_HIRE_DATE, EMP_DOB from EMPLOYEE as e JOIN THEMEPARK as t ON e.PARK_CODE=t.PARK_CODE;
+select * from EMP_DETAILS ;
++---------+-----------+--------------+------------+-----------+---------------+------------+
+| EMP_NUM | PARK_CODE | PARK_NAME    | EMP_LNAME  | EMP_FNAME | EMP_HIRE_DATE | EMP_DOB    |
++---------+-----------+--------------+------------+-----------+---------------+------------+
+|     100 | FR1001    | FairyLand    | Calderdale | Emma      | 1992-03-15    | 1972-06-15 |
+|     101 | UK3452    | PleasureLand | Ricardo    | Marshel   | 1996-04-25    | 1978-03-19 |
+|     102 | FR1001    | FairyLand    | Arshad     | Arif      | 1990-12-20    | 1969-11-14 |
+|     103 | UK3452    | PleasureLand | Roberts    | Anne      | 1994-08-16    | 1974-10-16 |
+|     104 | ZA1342    | GoldTown     | Denver     | Enrica    | 2001-10-20    | 1980-11-08 |
+|     105 | FR1001    | FairyLand    | Namowa     | Mirrelle  | 2006-11-08    | 1990-03-14 |
+|     106 | ZA1342    | GoldTown     | Smith      | Gemma     | 1989-01-05    | 1968-02-12 |
++---------+-----------+--------------+------------+-----------+---------------+------------+
+
+
+Question 3:
+
+select EMP_FNAME,EMP_LNAME,PARK_NAME from EMP_DETAILS;
++-----------+------------+--------------+
+| EMP_FNAME | EMP_LNAME  | PARK_NAME    |
++-----------+------------+--------------+
+| Emma      | Calderdale | FairyLand    |
+| Marshel   | Ricardo    | PleasureLand |
+| Arif      | Arshad     | FairyLand    |
+| Anne      | Roberts    | PleasureLand |
+| Enrica    | Denver     | GoldTown     |
+| Mirrelle  | Namowa     | FairyLand    |
+| Gemma     | Smith      | GoldTown     |
++-----------+------------+--------------+
+
+Question 4:
+
+create view TICKET_SALES as select PARK_NAME,max(LINE_PRICE),min(LINE_PRICE),AVG(LINE_PRICE) from THEMEPARK as t JOIN SALES as s ON t.PARK_CODE=s.PARK_CODE JOIN SALES_LINE as sl ON s.TRANSACTION_NO=sl.TRANSACTION_NO group by park_name; 
+
+select * from TICKET_SALES;
++--------------+-----------------+-----------------+-----------------+
+| PARK_NAME    | max(LINE_PRICE) | min(LINE_PRICE) | AVG(LINE_PRICE) |
++--------------+-----------------+-----------------+-----------------+
+| FairyLand    |          139.96 |           14.99 |       50.232500 |
+| GoldTown     |          114.68 |           12.12 |       47.637778 |
+| PleasureLand |          168.40 |           21.98 |       60.785714 |
++--------------+-----------------+-----------------+-----------------+
+
+Question 5:
+
+SELECT DISTINCT(DATE_FORMAT(SALE_DATE, '%a %D %b %Y')) FROM SALES;
++-----------------------------------------+
+| (DATE_FORMAT(SALE_DATE, '%a %D %b %Y')) |
++-----------------------------------------+
+| Fri 18th May 2007                       |
++-----------------------------------------+
+
+Question 6:
+SELECT EMP_FNAME,EMP_LNAME,CONCAT(DATE_FORMAT(EMP_DOB,'%m'), DATE_FORMAT(EMP_DOB,'%d'),UPPER(LEFT(EMP_LNAME,6))) AS USER_ID FROM EMPLOYEE;
++-----------+------------+------------+
+| EMP_FNAME | EMP_LNAME  | USER_ID    |
++-----------+------------+------------+
+| Emma      | Calderdale | 0615CALDER |
+| Marshel   | Ricardo    | 0319RICARD |
+| Arif      | Arshad     | 1114ARSHAD |
+| Anne      | Roberts    | 1016ROBERT |
+| Enrica    | Denver     | 1108DENVER |
+| Mirrelle  | Namowa     | 0314NAMOWA |
+| Gemma     | Smith      | 0212SMITH  |
++-----------+------------+------------+
+7 rows in set (0.000 sec)
+
+
+
+Question 7:
+select EMP_FNAME,EMP_LNAME,EMP_DOB from EMPLOYEE where dayofmonth(EMP_DOB)=14;
++-----------+-----------+------------+
+| EMP_FNAME | EMP_LNAME | EMP_DOB    |
++-----------+-----------+------------+
+| Arif      | Arshad    | 1969-11-14 |
+| Mirrelle  | Namowa    | 1990-03-14 |
++-----------+-----------+------------+
+
+
+
+Question 9:
+create view izaan as select EMP_FNAME,EMP_LNAME,avg(HOUR_RATE) from EMPLOYEE as e JOIN HOURS as h ON e.EMP_NUM=h.EMP_NUM group by e.EMP_NUM;
+select * from izaan;
++-----------+------------+----------------+
+| EMP_FNAME | EMP_LNAME  | avg(HOUR_RATE) |
++-----------+------------+----------------+
+| Emma      | Calderdale |       6.500000 |
+| Marshel   | Ricardo    |       6.500000 |
+| Arif      | Arshad     |       5.990000 |
+| Enrica    | Denver     |       7.200000 |
+| Mirrelle  | Namowa     |       8.500000 |
++-----------+------------+----------------
+
+Question 10:
+select * from ATTRACTION where ATTRACT_CAPACITY <= (SELECT AVG(ATTRACT_CAPACITY) FROM ATTRACTION);
++------------+-----------------+-------------+------------------+-----------+
+| ATTRACT_NO | ATTRACT_NAME    | ATTRACT_AGE | ATTRACT_CAPACITY | PARK_CODE |
++------------+-----------------+-------------+------------------+-----------+
+|      10034 | ThunderCoaster  |          11 |               34 | FR1001    |
+|      10056 | SpinningTeacups |           4 |               62 | FR1001    |
+|      10067 | FlightToStars   |          11 |               24 | FR1001    |
+|      10078 | Ant-Trap        |          23 |               30 | FR1001    |
+|      10082 | NULL            |          10 |               40 | ZA1342    |
+|      30011 | BlackHole2      |          12 |               34 | UK3452    |
+|      30012 | Pirates         |          10 |               42 | UK3452    |
++------------+-----------------+-------------+------------------+-----------+
+7 rows in set (0.001 sec)
+
+Question 11:
+SELECT TICKET_NO, PARK_CODE FROM TICKET t WHERE t.TICKET_PRICE > (SELECT MAX(t2.TICKET_PRICE) FROM TICKET t2 WHERE t2.TICKET_TYPE = 'Child');
++-----------+-----------+
+| TICKET_NO | PARK_CODE |
++-----------+-----------+
+|     11001 | SP4533    |
+|     13002 | FR1001    |
+|     67833 | ZA1342    |
+|     88568 | UK3452    |
++-----------+-----------+
+
+Question 12:
+SELECT ATTRACTION.ATTRACT_NO, MIN(HOUR_RATE), MAX(HOUR_RATE)  FROM ATTRACTION , HOURS GROUP BY ATTRACTION.ATTRACT_NO;
++------------+----------------+----------------+
+| ATTRACT_NO | MIN(HOUR_RATE) | MAX(HOUR_RATE) |
++------------+----------------+----------------+
+|      10034 |           5.99 |           8.50 |
+|      10056 |           5.99 |           8.50 |
+|      10067 |           5.99 |           8.50 |
+|      10078 |           5.99 |           8.50 |
+|      10082 |           5.99 |           8.50 |
+|      10098 |           5.99 |           8.50 |
+|      20056 |           5.99 |           8.50 |
+|      30011 |           5.99 |           8.50 |
+|      30012 |           5.99 |           8.50 |
+|      30044 |           5.99 |           8.50 |
+|      98764 |           5.99 |           8.50 |
++------------+----------------+----------------+
+
+Question 13:
+SELECT e.EMP_FNAME, e.EMP_LNAME, a.ATTRACT_NO, h.DATE_WORKED FROM EMPLOYEE as e JOIN HOURS as  h ON e.EMP_NUM = h.EMP_NUM JOIN ATTRACTION as  a ON h.ATTRACT_NO = a.ATTRACT_NO;
++-----------+------------+------------+-------------+
+| EMP_FNAME | EMP_LNAME  | ATTRACT_NO | DATE_WORKED |
++-----------+------------+------------+-------------+
+| Emma      | Calderdale |      10034 | 2007-05-18  |
+| Emma      | Calderdale |      10034 | 2007-05-20  |
+| Marshel   | Ricardo    |      10034 | 2007-05-18  |
+| Arif      | Arshad     |      30012 | 2007-05-23  |
+| Arif      | Arshad     |      30044 | 2007-05-21  |
+| Arif      | Arshad     |      30044 | 2007-05-22  |
+| Enrica    | Denver     |      30011 | 2007-05-21  |
+| Enrica    | Denver     |      30012 | 2007-05-22  |
+| Mirrelle  | Namowa     |      10078 | 2007-05-18  |
+| Mirrelle  | Namowa     |      10098 | 2007-05-18  |
+| Mirrelle  | Namowa     |      10098 | 2007-05-19  |
++-----------+------------+------------+-------------+
+11 rows in set (0.001 sec)
+
+
+
+
+
+

@@ -1,0 +1,147 @@
+EXAMPLE  4.1
+SELECT AVG(hour_rate) AS AVGHR
+FROM hours;
+
++----------+
+| AVGHR    |
++----------+
+| 7.033636 |
++----------+
+1 row in set (0.052 sec)
+*************************************************************************************************************************
+
+EXAMPLE  4.2
+SELECT AVG(ATTRACT_AGE) FROM ATTRACTION WHERE PARK_CODE = 'UK3452';
+
++------------------+
+| AVG(ATTRACT_AGE) |
++------------------+
+|           7.2500 |
++------------------+
+1 row in set (0.038 sec)
+
+*************************************************************************************************************************
+
+EXAMPLE 4.3
+select emp_num, SUM(hours_per_attract) as TOTAL_HOURS from hours GROUP BY EMP_NUM;
+
++---------+-------------+
+| emp_num | TOTAL_HOURS |
++---------+-------------+
+|     100 |          12 |
+|     101 |           6 |
+|     102 |          12 |
+|     104 |          12 |
+|     105 |          12 |
++---------+-------------+
+5 rows in set (0.037 sec)
+
+*************************************************************************************************************************
+
+EXAMPLE 4.4
+SELECT attract_no, MIN(hour_rate), MAX(hour_rate) FROM hours GROUP BY attract_no;
+
++------------+----------------+----------------+
+| attract_no | MIN(hour_rate) | MAX(hour_rate) |
++------------+----------------+----------------+
+|      10034 |           6.50 |           6.50 |
+|      10078 |           8.50 |           8.50 |
+|      10098 |           8.50 |           8.50 |
+|      30011 |           7.20 |           7.20 |
+|      30012 |           5.99 |           7.20 |
+|      30044 |           5.99 |           5.99 |
++------------+----------------+----------------+
+6 rows in set (0.032 sec)
+
+*************************************************************************************************************************
+
+EXAMPLE 4.5
+select emp_num, attract_no, AVG(hours_per_attract) From hours Group By emp_num Having AVG(hours_per_attract) >= 5;
+
++---------+------------+------------------------+
+| emp_num | attract_no | AVG(hours_per_attract) |
++---------+------------+------------------------+
+|     100 |      10034 |                 6.0000 |
+|     101 |      10034 |                 6.0000 |
+|     104 |      30011 |                 6.0000 |
++---------+------------+------------------------+
+3 rows in set (0.001 sec)
+
+*************************************************************************************************************************
+
+EXAMPLE 4.6
+SELECT * FROM employee CROSS JOIN hours;
+
+77 rows in set (0.001 sec)
+
+*************************************************************************************************************************
+
+EXAMPLE 4.7
+Select e.emp_lname, e.emp_fname, h.attract_no, h.date_worked from employee as e INNER JOIN hours as h ON employee.emp_num = hours.emp_num;
+
++-----------+------------+------------+-------------+
+| emp_lname | emp_fname  | attract_no | date_worked |
++-----------+------------+------------+-------------+
+| Calderdale| Emma 	 |      10034 | 2007-05-18  |
+| Calderdale| Emma 	 |      10034 | 2007-05-20  |
+| Ricardo   | Marshel    |      10034 | 2007-05-18  |
+| Arshad    | Arif       |      30012 | 2007-05-23  |
+| Arshad    | Arif       |      30044 | 2007-05-21  |
+| Arshad    | Arif       |      30044 | 2007-05-22  |
+| Denver    | Enrica     |      30011 | 2007-05-21  |
+| Denver    | Enrica     |      30012 | 2007-05-22  |
+| Namowa    | Mirrelle   |      10078 | 2007-05-18  |
+| Namowa    | Mirrelle   |      10098 | 2007-05-18  |
+| Namowa    | Mirrelle   |      10098 | 2007-05-19  |
++-----------+------------+------------+-------------+
+11 rows in set (0.001 sec)
+
+*************************************************************************************************************************
+
+EXAMPLE 4.8
+Select e.emp_fname, e.emp_lname, h.attract_no, h.date_worked, a.attract_name from ((employee as e INNER JOIN hours as h ON employee.emp_num = hours.emp_num)
+INNER JOIN attraction as a ON hours.attract_no = attraction.attract_no);
+
++-----------+------------+------------+-------------+----------------+
+| emp_fname | emp_lname  | attract_no | date_worked | attract_name   |
++-----------+------------+------------+-------------+----------------+
+| Emma      | Calderdale |      10034 | 2007-05-18  | ThunderCoaster |
+| Emma      | Calderdale |      10034 | 2007-05-20  | ThunderCoaster |
+| Marshel   | Ricardo    |      10034 | 2007-05-18  | ThunderCoaster |
+| Arif      | Arshad     |      30012 | 2007-05-23  | Pirates        |
+| Arif      | Arshad     |      30044 | 2007-05-21  | UnderSeaWord   |
+| Arif      | Arshad     |      30044 | 2007-05-22  | UnderSeaWord   |
+| Enrica    | Denver     |      30011 | 2007-05-21  | BlackHole2     |
+| Enrica    | Denver     |      30012 | 2007-05-22  | Pirates        |
+| Mirrelle  | Namowa     |      10078 | 2007-05-18  | Ant-Trap       |
+| Mirrelle  | Namowa     |      10098 | 2007-05-18  | Carnival       |
+| Mirrelle  | Namowa     |      10098 | 2007-05-19  | Carnival       |
++-----------+------------+------------+-------------+----------------+
+11 rows in set (0.001 sec)
+
+
+*************************************************************************************************************************
+
+EXAMPLE 4.9
+Select park_name, COUNT(transaction_no) as total_sales from themepark JOIN sales
+where park_country = 'FR' OR park_country = 'UK'
+GROUP BY park_name;
+
++--------------+-------------+
+| park_name    | total_sales |
++--------------+-------------+
+| Barcelona    |          19 |
+| MiniLand     |          19 |
+| PleasureLand |          19 |
+| Splash       |          19 |
++--------------+-------------+
+4 rows in set (0.001 sec)
+
+*************************************************************************************************************************
+
+EXAMPLE 4.10
+Select sale_date, line_qty, line_price from sales JOIN sales_line where sale_date = '2007-05-18';
+
+589 rows in set (0.001 sec)
+
+*************************************************************************************************************************

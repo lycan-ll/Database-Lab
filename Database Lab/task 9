@@ -1,0 +1,115 @@
+CREATE USER'izaan'@'localhost' IDENTIFIED BY 'izaan';
+*********************************************************************************************************************************************************************
+TASK 2.1
+grant select,update on p200613_izaan.EMPLOYEE to 'izaan'@'localhost';
+Query OK, 0 rows affected (0.001 sec)
+
+2.2
+ UPDATE EMPLOYEE SET EMP_AREA_CODE='1211' where EMP_NUM='100';
+Query OK, 1 row affected (0.004 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+2.3
+GRANT all privileges on EMPLOYEE.* to 'izaan'@'localhost';
+Query OK, 0 rows affected (0.002 sec)
+show databases;
++--------------------------+
+| Database                 |
++--------------------------+
+| company                  |
+| demo                     |
+| fb                       |
+| hr                       |
+| information_schema       |
+| library_managment_system |
+| mysql                    |
+| organization             |
+| p200613_izaan            |
+| performance_schema       |
+| phpmyadmin               |
+| sales_co                 |
+| students                 |
+| test                     |
++--------------------------+
+14 rows in set (0.000 sec)
+
+
+2.4
+GRANT CREATE ON *.* to 'izaan'@'localhost';
+Query OK, 0 rows affected (0.001 sec)
+*********************************************************************************************************************************************************************
+
+TASK 3
+revoke select,update on p200613_izaan.EMPLOYEE from 'izaan'@'localhost';
+Query OK, 0 rows affected (0.001 sec)
+
+*********************************************************************************************************************************************************************
+TASK 4
+
+4.1
+set autocommit=0;
+Query OK, 0 rows affected (0.000 sec)
+
+4.2
+insert into THEMEPARK VALUES('opo23','FairyLand','KARACHI','FR');
+Query OK, 1 row affected (0.000 sec)
+
+UPDATE THEMEPARK SET PARK_CITY='LAHORE' where PARK_CITY='KARACHI';
+Query OK, 2 rows affected (0.000 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+4.3
+rollback;
+select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+| FR1001    | FairyLand     | PARIS        | FR           |
+| NL1202    | Efling        | NOORD        | NL           |
+| PK123     | Izaan         | KARACHI      | PK           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+8 rows in set (0.000 sec)
+
+4.4
+savepoint s1;
+Query OK, 0 rows affected (0.000 sec)
+
+select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+| FR1001    | FairyLand     | PARIS        | FR           |
+| IV20      | DISNEYLAND    | JAPAN        | JK           |
+| NL1202    | Efling        | NOORD        | NL           |
+| PK123     | Izaan         | KARACHI      | PK           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+9 rows in set (0.000 sec)
+
+rollback to s1;
+
+select * from THEMEPARK;
++-----------+---------------+--------------+--------------+
+| PARK_CODE | PARK_NAME     | PARK_CITY    | PARK_COUNTRY |
++-----------+---------------+--------------+--------------+
+| FR1001    | FairyLand     | PARIS        | FR           |
+| NL1202    | Efling        | NOORD        | NL           |
+| PK123     | Izaan         | KARACHI      | PK           |
+| SP4533    | AdventurePort | BARCELONA    | SP           |
+| SW2323    | Labyrinthe    | LAUSANNE     | SW           |
+| UK2622    | MiniLand      | WINDSOR      | UK           |
+| UK3452    | PleasureLand  | STOKE        | UK           |
+| ZA1342    | GoldTown      | JOHANNESBURG | ZA           |
++-----------+---------------+--------------+--------------+
+8 rows in set (0.000 sec)
+
+

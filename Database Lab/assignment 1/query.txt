@@ -1,0 +1,172 @@
+create table employees(
+emp_no INT PRIMARY KEY,
+birth_date DATE,
+first_name VARCHAR(14),
+last_name VARCHAR(16),
+sex ENUM('M','F'),
+hire_date DATE
+);
+
+create table departments(
+dept_no CHAR(4) PRIMARY KEY,
+dept_name VARCHAR(40)
+);
+
+create table dept_emp(
+emp_no INT,
+dept_no CHAR(4),
+from_date DATE,
+to_date DATE,
+PRIMARY KEY(emp_no, dept_no),
+FOREIGN KEY(emp_no) REFERENCES employees(emp_no),
+FOREIGN KEY(dept_no) REFERENCES departments(dept_no)
+);
+
+create table dept_manager(
+dept_no CHAR(4),
+emp_no INT,
+from_date DATE,
+to_date DATE,
+FOREIGN KEY(dept_no) REFERENCES departments(dept_no),
+FOREIGN KEY(emp_no) REFERENCES employees(emp_no),
+PRIMARY KEY(dept_no, emp_no)
+);
+
+create table salaries(
+emp_no INT,
+salary INT,
+from_date DATE,
+to_date DATE,
+PRIMARY KEY(emp_no, from_date, to_date),
+FOREIGN KEY(emp_no) REFERENCES employees(emp_no)
+);
+
+create table titles(
+emp_no INT,
+title VARCHAR(50),
+from_date DATE,
+to_date DATE,
+PRIMARY KEY(emp_no, title),
+FOREIGN KEY(emp_no) REFERENCES employees(emp_no)
+);
+######################################################################################################################################################################
+Q)INSERT DATA:
+   1)Add a couple of employees and a couple of departments.
+        
+       ->INSERT INTO employees VALUES(1,'2002-02-18','Talha','Waseem','M','2009-06-9');
+       ->INSERT INTO employees VALUES(2,'2007-07-24','ALi','Malik','M','2018-09-15');
+       ->select * from employees;
++--------+------------+------------+-----------+------+------------+
+| emp_no | birth_date | first_name | last_name | sex  | hire_date  |
++--------+------------+------------+-----------+------+------------+
+|      1 | 2002-02-18 | Talha      | Waseem    | M    | 2009-06-09 |
+|      2 | 2007-07-24 | ALi        | Malik     | M    | 2018-09-15 |
+
+       ->INSERT INTO departments VALUES(1,'Sales department');
+       ->INSERT INTO departments VALUES(2,'General department');
++---------+--------------------+
+| dept_no | dept_name          |
++---------+--------------------+
+| 1       | Sales department   |
+| 2       | General department |
++---------+--------------------+
+
+   2)Add an existing employee in a department by inserting data into the dept_emp table.
+	->INSERT INTO dept_emp VALUES(2,2,'2018-09-15','2018-03-13');
+	->INSERT INTO dept_emp VALUES(1,1,'2009-06-09','2012-07-27');
++--------+---------+------------+------------+
+| emp_no | dept_no | from_date  | to_date    |
++--------+---------+------------+------------+
+|      1 | 1       | 2009-06-09 | 2012-07-27 |
+|      2 | 2       | 2018-09-15 | 2018-03-13 |
++--------+---------+------------+------------+
+
+   3)Add salaries for the added employees.
+         ->INSERT INTO salaries VALUES(1,15000,'2009-06-09','2012-07-27');
+         ->INSERT INTO salaries VALUES(2,20000,'2018-09-15','2018-03-13');
++--------+--------+------------+------------+
+| emp_no | salary | from_date  | to_date    |
++--------+--------+------------+------------+
+|      1 |  15000 | 2009-06-09 | 2012-07-27 |
+|      2 |  20000 | 2018-09-15 | 2018-03-13 |
++--------+--------+------------+------------+
+
+  4)Add employee titles and managers of the departments.
+         ->INSERT INTO titles VALUES(1,'MANAGER','2009-06-09','2012-07-27');
+         ->INSERT INTO titles VALUES(2,'worker','2018-09-15','2018-03-13');
++--------+---------+------------+------------+
+| emp_no | title   | from_date  | to_date    |
++--------+---------+------------+------------+
+|      1 | MANAGER | 2009-06-09 | 2012-07-27 |
+|      2 | worker  | 2018-09-15 | 2018-03-13 |
++--------+---------+------------+------------+
+
+###########################################################################################################################################################################
+
+Q) UPDATE
+
+   1)Change department of an employee.
+   	->UPDATE dept_emp SET dept_no='2' where dept_no='1';
+	->UPDATE dept_emp SET dept_no='1' where dept_no='2';
++--------+---------+------------+------------+
+| emp_no | dept_no | from_date  | to_date    |
++--------+---------+------------+------------+
+|      1 | 2       | 2009-06-09 | 2012-07-27 |
+|      2 | 1     | 2018-09-15 | 2018-03-13 |
++--------+---------+------------+------------+
+
+   2)Update an employees’ salary.
+   	->UPDATE salaries SET salary=17000 where salary=15000;
+   	->UPDATE salaries SET salary=25000 where salary=20000;
+ +--------+--------+------------+------------+
+| emp_no | salary | from_date  | to_date    |
++--------+--------+------------+------------+
+|      1 |  17000 | 2009-06-09 | 2012-07-27 |
+|      2 |  25000 | 2018-09-15 | 2018-03-13 |
++--------+--------+------------+------------+
+
+    3)Change the name of a department.
+        ->UPDATE departments SET dept_name='Finance department' where dept_name='Sales department';
+      +---------+--------------------+
+| dept_no | dept_name          |
++---------+--------------------+
+| 1       | Finance department |
+| 2       | General department |
++---------+--------------------+
+
+    4)Change an employees’ job title.
+     	->UPDATE titles SET title='CEO' where title='MANAGER';
+     	->UPDATE titles SET title='HR' where title='worker';
++--------+-------+------------+------------+
+| emp_no | title | from_date  | to_date    |
++--------+-------+------------+------------+
+|      1 | CEO   | 2009-06-09 | 2012-07-27 |
+|      2 | HR    | 2018-09-15 | 2018-03-13 |
++--------+-------+------------+------------+
+ 
+    5)Change an employees’ hire date.
+    	->UPDATE employees SET hire_date='2017-08-31' where hire_date='2009-06-09';
++--------+------------+------------+-----------+------+------------+
+| emp_no | birth_date | first_name | last_name | sex  | hire_date  |
++--------+------------+------------+-----------+------+------------+
+|      1 | 2002-02-18 | Talha      | Waseem    | M    | 2017-08-31 |
+|      2 | 2007-07-24 | ALi        | Malik     | M    | 2018-09-15 |
++--------+------------+------------+-----------+------+------------+
+
+###########################################################################################################################################################################
+
+Q) DELETE
+
+	1)DELETE all dept_emp.
+		DELETE FROM dept_emp WHERE emp_no='1';
++--------+---------+------------+------------+
+| emp_no | dept_no | from_date  | to_date    |
++--------+---------+------------+------------+
+|      2 | 1       | 2018-09-15 | 2018-03-13 |
++--------+---------+------------+------------+
+
+
+
+
+
+
